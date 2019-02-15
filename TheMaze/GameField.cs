@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace TheMaze
 {
-    enum Obj { wall, space };
+    enum Obj { wall, space, background};
     public class GameField
     {
         FormMaze parent;
@@ -35,30 +35,20 @@ namespace TheMaze
             mazePicture = new PictureBox() { Size = bitmapField.Size };
             mazePicture.Parent = parent;
             mazePicture.Click += MazePicture_Click;
-            // DefineSprites();
         }
 
         private void MazePicture_Click(object sender, EventArgs e)
         {
-            Size some = parent.ClientSize;
-        }
+            MouseEventArgs em = e as MouseEventArgs;
+            int x = em.X;
+            int y = em.Y;
 
-        private void DefineSprites()
-        {
-            Image img = Properties.Resources.background;
-            Image newImage = Properties.Resources.space;
-            Image newImage2 = Properties.Resources.background;
-            using (Graphics g = Graphics.FromImage(bitmapField))
-            {
-                g.DrawImage(Properties.Resources.background, 0, 0);
-                bitmapCoord.X += imgWidth;
-                g.DrawImage(Properties.Resources.space, 24, 0);
-                bitmapCoord.Y += imgHeight;
-                g.DrawImage(Properties.Resources.space, 0, 32);
-                g.DrawImage(Properties.Resources.background, 24, 32);
-            }
-
-            mazePicture.Image = bitmapField;
+            if (Field[y, x] == (int)Obj.background)
+                MessageBox.Show("Background");
+            else if (Field[y, x] == (int)Obj.wall)
+                MessageBox.Show("Wall");
+            else if (Field[y, x] == (int)Obj.space)
+                MessageBox.Show("Space");
         }
 
         // накладываем текстуры на булевое поле(0 - стена, 1 - земля)
@@ -71,11 +61,9 @@ namespace TheMaze
             {
                 for (int k = 0; k < width; k++)
                 {
-                    // проверям какие объекты находятся вокруг текущей точки поля(8 точек), 
-                    // опираясь на эти данные строим новые объекты 
-                    // если выходим за границы поля, проверяемая клетка принимается за 0(false)
                     Image sprite = Properties.Resources.background;
                     Obj objType = Obj.wall;
+
                     if (bfield[i, k] == true)
                     {
                         sprite = Properties.Resources.space;
@@ -83,94 +71,24 @@ namespace TheMaze
                     }
 
                     else if (
-                        //(i - 1 < 0 || k - 1 < 0 ? false : bfield[i - 1, k - 1]) == false
-                        //&& (i - 1 < 0 ? false : bfield[i - 1, k]) == false
-                        //&& (i - 1 < 0 || k + 1 >= width ? false : bfield[i - 1, k + 1]) == false
-                        /*&&*/ (k + 1 >= width ? false : bfield[i, k + 1]) == false
+                        (i - 1 < 0 || k - 1 < 0 ? false : bfield[i - 1, k - 1]) == false
+                        && (i - 1 < 0 ? false : bfield[i - 1, k]) == false
+                        && (i - 1 < 0 || k + 1 >= width ? false : bfield[i - 1, k + 1]) == false
+                        && (k + 1 >= width ? false : bfield[i, k + 1]) == false
                         && (i + 1 >= height || k + 1 >= width ? false : bfield[i + 1, k + 1]) == false
                         && (i + 1 >= height ? false : bfield[i + 1, k]) == false
                         && (i + 1 >= height || k - 1 < 0 ? false : bfield[i + 1, k - 1]) == false
                         && (k - 1 < 0 ? false : bfield[i, k - 1]) == false)
                     {
                         sprite = Properties.Resources.background;
-                        objType = Obj.wall;
+                        objType = Obj.background;
                     }
 
-                    else if (
-                       //(i - 1 < 0 || k - 1 < 0 ? false : bfield[i - 1, k - 1]) == true
-                       //&& (i - 1 < 0 ? false : bfield[i - 1, k]) == false
-                       //&& (i - 1 < 0 || k + 1 >= width ? false : bfield[i - 1, k + 1]) == false
-                       /* &&*/ (k + 1 >= width ? false : bfield[i, k + 1]) == false
-                        && (i + 1 >= height || k + 1 >= width ? false : bfield[i + 1, k + 1]) == false
-                        && (i + 1 >= height ? false : bfield[i + 1, k]) == false
-                        && (i + 1 >= height || k - 1 < 0 ? false : bfield[i + 1, k - 1]) == false
-                        && (k - 1 < 0 ? false : bfield[i, k - 1]) == false)
+                    else if (bfield[i, k] == false)
                     {
-                        sprite = Properties.Resources.downLeftWall;
+                        sprite = Properties.Resources.wall;
                         objType = Obj.wall;
                     }
-
-                    else if (
-                       //(i - 1 < 0 || k - 1 < 0 ? false : bfield[i - 1, k - 1]) == false
-                       //&& (i - 1 < 0 ? false : bfield[i - 1, k]) == false
-                       //&& (i - 1 < 0 || k + 1 >= width ? false : bfield[i - 1, k + 1]) == true
-                       /* &&*/ (k + 1 >= width ? false : bfield[i, k + 1]) == false
-                        && (i + 1 >= height || k + 1 >= width ? false : bfield[i + 1, k + 1]) == false
-                        && (i + 1 >= height ? false : bfield[i + 1, k]) == false
-                        && (i + 1 >= height || k - 1 < 0 ? false : bfield[i + 1, k - 1]) == false
-                        && (k - 1 < 0 ? false : bfield[i, k - 1]) == false)
-                    {
-                        sprite = Properties.Resources.downRightWall;
-                        objType = Obj.wall;
-                    }
-
-                    else if (
-                       //(i - 1 < 0 || k - 1 < 0 ? false : bfield[i - 1, k - 1]) == false
-                       //&& (i - 1 < 0 ? false : bfield[i - 1, k]) == false
-                       //&& (i - 1 < 0 || k + 1 >= width ? false : bfield[i - 1, k + 1]) == false
-                       /* &&*/ (k + 1 >= width ? false : bfield[i, k + 1]) == false
-                        && (i + 1 >= height || k + 1 >= width ? false : bfield[i + 1, k + 1]) == true
-                        && (i + 1 >= height ? false : bfield[i + 1, k]) == false
-                        && (i + 1 >= height || k - 1 < 0 ? false : bfield[i + 1, k - 1]) == false
-                        && (k - 1 < 0 ? false : bfield[i, k - 1]) == false)
-                    {
-                        sprite = Properties.Resources.upRightWall;
-                        objType = Obj.wall;
-                    }
-
-                    else if (
-                        // (i - 1 < 0 || k - 1 < 0 ? false : bfield[i - 1, k - 1]) == false
-                        // && (i - 1 < 0 ? false : bfield[i - 1, k]) == false
-                        // && (i - 1 < 0 || k + 1 >= width ? false : bfield[i - 1, k + 1]) == false
-                        /*&&*/ (k + 1 >= width ? false : bfield[i, k + 1]) == false
-                        && (i + 1 >= height || k + 1 >= width ? false : bfield[i + 1, k + 1]) == false
-                        && (i + 1 >= height ? false : bfield[i + 1, k]) == false
-                        && (i + 1 >= height || k - 1 < 0 ? false : bfield[i + 1, k - 1]) == true
-                        && (k - 1 < 0 ? false : bfield[i, k - 1]) == false)
-                    {
-                        sprite = Properties.Resources.upLeftWall;
-                        objType = Obj.wall;
-                    }
-
-                    else if ((i + 1 >= height ? false : bfield[i + 1, k]) == true)
-                    {
-                        sprite = Properties.Resources.upWall;
-                        objType = Obj.wall;
-                    }
-
-                    else if ((i - 1 < 0 ? false : bfield[i - 1, k]) == true)
-                    {
-                        sprite = Properties.Resources.downWall;
-                        objType = Obj.wall;
-                    }
-
-                   // else if (
-                   //     (k + 1 >= width ? false : bfield[i, k + 1]) == true
-                   //     || (k - 1 < 0 ? false : bfield[i, k - 1]) == true)
-                   // {
-                   //     sprite = Properties.Resources.sideWall;
-                   //     objType = Obj.wall;
-                   // }
 
                     using (Graphics g = Graphics.FromImage(bitmapField))
                         g.DrawImage(sprite, bitmapCoord.X, bitmapCoord.Y);

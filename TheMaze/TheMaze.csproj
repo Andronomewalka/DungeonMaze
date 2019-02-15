@@ -60,18 +60,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
@@ -82,34 +82,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\background.png" />
+    <None Include="Resources\wall.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\downLeftWall.png" />
+    <None Include="Resources\background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\downRightWall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\downWall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\space.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\upLeftWall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\upRightWall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\upWall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\leftWall.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\rightWall.png" />
+    <None Include="Resources\space.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
